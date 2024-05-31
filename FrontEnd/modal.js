@@ -109,6 +109,7 @@ function deleteImage() {
 // Gestion de la fermeture de la modale
 function closeModal() {
     const modalInput2 = document.getElementById("category");
+    const errorMsg = document.querySelector(".error-msg");
     // Effacer le contenu précédent de la galerie
     modalGallery.classList.remove("modal-gallery-none");
     modalGallery.innerHTML = "";  
@@ -116,7 +117,8 @@ function closeModal() {
     modalTitle.classList.remove("modal-title-hidden");
     modalTitleTwo.classList.remove("modal-title2");
     sendNewWork.classList.remove("btn-new-hidden");  
-    modalInput2.innerHTML = "";           
+    modalInput2.innerHTML = "";  
+    errorMsg.innerHTML = "";         
     displayProjects(); 
     resetModalForm();
 }

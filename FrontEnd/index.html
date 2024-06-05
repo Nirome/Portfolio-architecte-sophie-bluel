@@ -45,7 +45,7 @@
 	</section>
 	<section id="portfolio">
 		<div class="edit-title">
-			<h2>Mes Projets</h2>
+			<h2>Mes projets</h2>
 			<div class="js-modal">
 				<img src="assets/icons/edit-icon.svg" alt="icône représentant un papier et un crayon">
 				<a href="#modal1">modifier</a>
@@ -59,6 +59,7 @@
 				<div class="modal-gallery">
 				</div>
 				<div class="modal-gallery2">
+					<i class="fa-solid fa-arrow-left"></i>	
 					<div class="photo-modal">
 						<img class="logo-image" src="assets/icons/logo-image.svg" alt="icône représentant une image">						
 						<input type="file" name="image" id="file">
@@ -71,7 +72,8 @@
 							<label for="title">Titre</label>
 							<input type="text" id="title">
 							<label for="category">Catégorie</label>
-							<select name="category" id="category"></select>
+							<select name="category" id="category">								
+							</select>
 						</form>
 					</div>
 					<div class="btn-check-wrapper">
@@ -83,10 +85,7 @@
 			</div>
 		</dialog>
 		<div class="btn-filter">
-			<button class="btn" id="all">Tous</button>
-			<button class="btn" id="objects">Objets</button>
-			<button class="btn" id="apartments">Appartements</button>
-			<button class="btn" id="hotels-and-restaurants">Hotels & restaurants</button>
+			<button class="btn-all btn btn-selected">Tous</button>
 		</div>
 		<div class="gallery">
 		</div>

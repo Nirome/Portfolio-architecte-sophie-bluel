@@ -1,6 +1,6 @@
 const errorMessage = document.getElementById("error-message");
 const loginForm = document.getElementById("login-form");
-const token = sessionStorage.getItem("token");
+const token = localStorage.getItem("token");
 const loginFormJs = document.getElementById("login-form-js");
 const loginTitle = document.querySelector(".login-title");
 
@@ -29,8 +29,8 @@ if (loginFormJs) {
         .then((data) => {
             // Vérifiez si le token est présent dans les données de la réponse
             if (data && data.token) {
-                // Stockez le token dans le sessionStorage
-                sessionStorage.setItem("token", data.token);
+                // Stockez le token dans le Local Storage
+                localStorage.setItem("token", data.token);
                 // Retour sur la page d'accueil
                 window.location.href = "index.html"; 
 

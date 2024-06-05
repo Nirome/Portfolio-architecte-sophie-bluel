@@ -145,6 +145,9 @@ li:hover {
 .login-title {
 	margin-top: 100px;
 }
+.login-bold {
+	font-weight: 600;
+}
 /*** Section introduction ***/
 #introduction {
 	display: flex;
@@ -187,6 +190,7 @@ li:hover {
 	display: none;
 }
 .btn {
+	border: 1px solid #1D6154;
 	border-radius :60px;
 	height: 37px;
 	color: #1D6154;
@@ -349,6 +353,14 @@ li:hover {
 	display: none;
 }
 
+.fa-arrow-left {
+	position: absolute;
+	top: 25px;
+	left: 30px;
+	font-size: 20px;
+	cursor: pointer;
+
+}
 /*** Galerie ***/
 .gallery {
 	width: 100%;

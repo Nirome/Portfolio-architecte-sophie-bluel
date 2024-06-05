@@ -33,58 +33,51 @@ function displayWorks(projects) {
   }
 }
 
-// Gestion des boutons
-const btn = document.querySelectorAll(".btn");
-const btnAllProjects = document.getElementById("all");
-const btnObjects = document.getElementById("objects");
-const btnApartments = document.getElementById("apartments");
-const btnHotelsAndRestaurants = document.getElementById("hotels-and-restaurants");
-
-// Fonctions de filtrage
-function allProjects() {
-  // on attribue la classe "btn-selected" au bouton sélectionné
-  btn.forEach((button) => {
-    button.classList.remove("btn-selected");
-  });
-  btnAllProjects.classList.add("btn-selected");
-  displayWorks(data); // Afficher tous les projets
+// Générer les filtres dynamiquement
+export async function getCategories() {
+  const response = await fetch("http://localhost:5678/api/categories");
+  return await response.json();
 }
 
-function categoryObjects() {
-  const objects = data.filter((work) => work.categoryId === 1);
-  // on attribue la classe "btn-selected" au bouton sélectionné
-  btn.forEach((button) => {
-    button.classList.remove("btn-selected");
+async function displayCategoryButton() {
+  const categories = await getCategories(); 
+  const btnFilter = document.querySelector(".btn-filter");
+  const btnAll = document.querySelector(".btn-all");
+  
+  btnAll.addEventListener("click", () => {
+    const allButtons = btnFilter.querySelectorAll("button");
+    allButtons.forEach(btn => {
+      btnAll.classList.add("btn-selected")
+      btn.classList.remove("btn-selected");
+      displayWorks(data); 
+    });
   });
-  btnObjects.classList.add("btn-selected");
-  displayWorks(objects); // Afficher les objets
-}
 
-function categoryApartments() {
-  const apartments = data.filter((work) => work.categoryId === 2);
-  // on attribue la classe "btn-selected" au bouton sélectionné
-  btn.forEach((button) => {
-    button.classList.remove("btn-selected");
-  });
-  btnApartments.classList.add("btn-selected");
-  displayWorks(apartments); // Afficher les appartements
+  categories.forEach(category => {
+    const button = document.createElement("button");     
+    button.value = category.id ; 
+    button.textContent = category.name;   
+    button.classList.add("btn");
+    btnFilter.appendChild(button);
+      
+    button.addEventListener("click", () => {
+      button.classList.add("btn-selected");
+      const allButtons = btnFilter.querySelectorAll("button");
+      allButtons.forEach(btn => {
+        if (btn !== button) {
+          btn.classList.remove("btn-selected");
+        }
+      });
+           
+      // Filtrer et afficher les travaux correspondant à la catégorie
+      const filteredWorks = data.filter(work => work.categoryId == category.id);
+      displayWorks(filteredWorks);
+    })  
+  })
 }
-
-function categoryHotelsAndRestaurants() {
-  const hotelsAndRestaurants = data.filter((work) => work.categoryId === 3);
-  // on attribue la classe "btn-selected" au bouton sélectionné
-  btn.forEach((button) => {
-    button.classList.remove("btn-selected");
-  });
-  btnHotelsAndRestaurants.classList.add("btn-selected");
-  displayWorks(hotelsAndRestaurants); // Afficher les hôtels et restaurants
-}
-
-// Écouteurs d'événements pour les boutons de filtrage
-btnAllProjects.addEventListener("click", allProjects);
-btnObjects.addEventListener("click", categoryObjects);
-btnApartments.addEventListener("click", categoryApartments);
-btnHotelsAndRestaurants.addEventListener("click", categoryHotelsAndRestaurants);
+displayCategoryButton();    
 
 // Initialisation : récupérer les projets et les afficher tous par défaut
 fetchAndStoreProjects();
+
+

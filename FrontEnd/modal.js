@@ -1,5 +1,4 @@
-import { fetchAndStoreProjects } from "./projects.js";
-import { getProjects } from "./projects.js";
+import { fetchAndStoreProjects, getProjects, getCategories } from "./projects.js";
 
 // gestion de l'affichage en mode login
 const jsModal = document.querySelector(".js-modal");
@@ -9,7 +8,7 @@ const editMode = document.querySelector(".edit-mode");
 const btnFilter = document.querySelector(".btn-filter");
 const header = document.querySelector(".js-header");
 
-if (sessionStorage.getItem("token")) {
+if (localStorage.getItem("token")) {
     // On retire les boutons filtres
     btnFilter.classList.add("btn-hidden");
     // On fait apparaître le bouton "modifier" et on remplace "login" par "logout" 
@@ -31,7 +30,7 @@ if (sessionStorage.getItem("token")) {
 
 // On se déconnecte au click sur le bouton logout
 btnLogout.addEventListener("click", () => {
-    sessionStorage.clear();
+    localStorage.clear();
     btnFilter.classList.remove("btn-hidden");
     btnLogin.setAttribute("id", "login");
     btnLogout.setAttribute("id", "logout");
@@ -51,12 +50,13 @@ const modalGallery = document.querySelector(".modal-gallery");
 const body = document.body;
 
 // On fait apparaitre la modale au click
-jsModal.addEventListener("click", () => {
+function displayModal() {
     modalHidden.classList.add("modal-uncovered");
     modalGalleryTwo.style.display = "none";  
     modalClosed.addEventListener("click", closeModal);           
     getProjects();
-});
+};
+jsModal.addEventListener("click", displayModal);
 
 // On fait apparaitre les projets dans la modale
 async function displayProjects() {
@@ -86,7 +86,7 @@ displayProjects();
 // Suppression des travaux
 function deleteImage() {
     const iconDeleteAll = document.querySelectorAll(".span-delete");
-    const token = sessionStorage.getItem("token");
+    const token = localStorage.getItem("token");
     iconDeleteAll.forEach(span => {
         span.addEventListener("click", (e) => {
             e.preventDefault();
@@ -110,6 +110,7 @@ function deleteImage() {
 function closeModal() {
     const modalInput2 = document.getElementById("category");
     const errorMsg = document.querySelector(".error-msg");
+    
     // Effacer le contenu précédent de la galerie
     modalGallery.classList.remove("modal-gallery-none");
     modalGallery.innerHTML = "";  
@@ -117,7 +118,7 @@ function closeModal() {
     modalTitle.classList.remove("modal-title-hidden");
     modalTitleTwo.classList.remove("modal-title2");
     sendNewWork.classList.remove("btn-new-hidden");  
-    modalInput2.innerHTML = "";  
+    modalInput2.innerHTML = ""; 
     errorMsg.innerHTML = "";         
     displayProjects(); 
     resetModalForm();
@@ -166,22 +167,25 @@ sendNewWork.addEventListener("click", () => {
         }
     })
 
-    async function getCategories() {
-        const response = await fetch("http://localhost:5678/api/categories");
-        return await response.json();
-    }
-
     async function displayCategoryModal() {
-        const categories = await getCategories()
+        const emptyOption = document.createElement("option");           
+        emptyOption.value = "";
+        emptyOption.hidden = true;
+        emptyOption.disabled = true;
+        emptyOption.selected = true;
+        modalInput2.appendChild(emptyOption);
+
+        const categories = await getCategories();   
         categories.forEach(category => {
-            const option = document.createElement("option")
-            option.value = category.id  
-            option.textContent = category.name
-            modalInput2.appendChild(option)   
+            const option = document.createElement("option");
+            option.value = category.id ; 
+            option.textContent = category.name;
+            modalInput2.appendChild(option);   
         });
     }
     displayCategoryModal();    
 }); 
+
 
 // Ajout photo
 const form = document.querySelector(".form");
@@ -213,7 +217,7 @@ btnCheck.addEventListener("click", async (e) => {
 });
  
 // On s'assure que le formulaire est bien rempli
-function formCompleted() {
+function completeForm() {
     const btnCheck = document.querySelector(".btn-check");
     const image = document.getElementById("file");
     const title = document.getElementById("title");
@@ -239,7 +243,7 @@ function formCompleted() {
         }   
     })       
 }
-formCompleted(); 
+completeForm(); 
 
 // Réinitialiser la modale après la fermeture
 function resetModalForm() {
@@ -267,3 +271,10 @@ function resetModalForm() {
     btnCheck.disabled = true;
     btnCheck.removeAttribute("id", "btn-check-ok");
 }
+
+// Gestion de la flèche de retour
+const arrowLeft = document.querySelector(".fa-arrow-left");
+arrowLeft.addEventListener("click", () => {
+    closeModal();
+    displayModal(); 
+})
